@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Play Lot India</title>
+  </head>
+
+  <body>
+    <h2>PlayLot India</h2>
+    <div id="form">
+      <div style="display: flex; justify-content: center">
+        <input
+          type="email"
+          class="login-btn"
+          id="email"
+          placeholder="your email"
+          required
+        />
+        <input
+          type="text"
+          id="password"
+          class="login-btn"
+          placeholder="password"
+          required
+        />
+      </div>
+      <div style="margin-top: 20px; display: flex; justify-content: center">
+        <button id="signupBtn">Sign Up</button>
+        <button id="loginBtn">Log In</button>
+      </div>
+    </div>
+    <div id="hide">
+      Hello,
+      <span id="show-email"></span>
+      !
+    </div>
+    <br /><br />
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Winner</th>
+      </tr>
+      <tr>
+        <td>11:00 am</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>11:15 am</td>
+        <td>8</td>
+      </tr>
+      <tr>
+        <td>11:30 am</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>11:45 am</td>
+        <td>6</td>
+      </tr>
+      <tr>
+        <td>11:00 am</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>11:15 am</td>
+        <td>7</td>
+      </tr>
+      <tr>
+        <td>11:30 am</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>11:45 am</td>
+        <td>2</td>
+      </tr>
+    </table>
+    <p style="margin-top: 60px; text-align: center; font-size: 12px">
+      &copy; 2022, PlayLot India. All rights reserved.
+    </p>
+  </body>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
+      authDomain: "qclottery.firebaseapp.com",
+      projectId: "qclottery",
+      storageBucket: "qclottery.appspot.com",
+      messagingSenderId: "650163027647",
+      appId: "1:650163027647:web:961de905315b549657500a",
+    };
+
+    const app = initializeApp(firebaseConfig);
+  </script>
+  <script type="module" src="signup.js"></script>
+  <script type="module" src="login.js"></script>
+</html>

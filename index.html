@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADMIN</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h2>>> PlayLot</h2>
+      <div class="header-user">
+        <p id="profile-email"></p>
+      </div>
+    </div>
+
+    <!-- <br /><br />
+    <div>
+      <p style="text-align: center; font-size: 10px">
+        © 2022, PlayLot India. All rights reserved.
+      </p>
+    </div> -->
+    <!-- <button id="logoutBtn">Log out</button> -->
+    <div style="display: flex; flex-direction: column">
+      <a href="/pages/login.html">login</a>
+      <!-- <a href="/pages/signup.html">Add New Dealer</a> -->
+      <a href="/history/index.html">history</a>
+    </div>
+  </body>
+
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
+      authDomain: "qclottery.firebaseapp.com",
+      projectId: "qclottery",
+      storageBucket: "qclottery.appspot.com",
+      messagingSenderId: "650163027647",
+      appId: "1:650163027647:web:961de905315b549657500a",
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import {
+      getDoc,
+      doc,
+      updateDoc,
+      setDoc,
+      arrayUnion,
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", (e) => {
+      signOut(auth)
+        .then(() => {
+          //logout
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        showUserEmail(user.email);
+        loadUserData(user.email);
+      } else {
+        window.location = "/pages/login.html";
+      }
+    });
+
+    async function loadUserData(email) {
+      const ref = doc(db, "users", email);
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        let data = docSnap.data();
+        showUserCredits(data.credit);
+      }
+    }
+
+    function showUserEmail(email) {
+      document.getElementById("profile-email").textContent = email;
+    }
+    function showUserCredits(credit) {
+      document.getElementById("user-credit").textContent = credit;
+    }
+
+    //game - bet clicked
+    async function play(number, amount) {
+      const user = auth.currentUser;
+      const email = user.email;
+      const ref = doc(db, "users", email);
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        let data = docSnap.data();
+        if (amount <= data.credit) {
+          const date = 220423; //getDate();
+          await updateDoc(
+            doc(db, "users", email),
+            {
+              [`games.${date}`]: {
+                amt: amount,
+                scrip: number,
+                won: false,
+              },
+              credit: data.credit - amount,
+              credits: arrayUnion({ time: date, trans: amount }),
+            },
+            { merge: true }
+          );
+          window.location = "/";
+          //update game details
+        } else {
+          alert("insufficient credits, add credits");
+        }
+      }
+    }
+
+    const btn = document.getElementById("btn-submit");
+    btn.addEventListener("click", async (e) => {
+      const bet_amt = document.getElementById("bet-amt").value;
+      let bet_no;
+      let ele = document.getElementsByName("scrip");
+      for (let i = 0; i < ele.length; i++) {
+        if (ele[i].checked) bet_no = ele[i].value;
+      }
+
+      play(bet_no, bet_amt);
+
+      const email = auth.currentUser.email;
+      const ref = doc(db, "users", email); //update credits
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        let data = docSnap.data();
+        showUserCredits(data.credit);
+      }
+    });
+  </script>
+  <script></script>
+</html>
