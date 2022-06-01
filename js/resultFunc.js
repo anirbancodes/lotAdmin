@@ -13,7 +13,7 @@ const amt = {
 };
 const glob_data = amt;
 const totBetAmt = 14000;
-const minAmt = 2;
+//const minAmt = 2;
 let maxPeople = []; //sorted in decreasing
 const marginP = 40; //in %
 const marginAmt = (totBetAmt * (100 - marginP)) / 100;
@@ -24,6 +24,7 @@ for (let i = 0; i < 10; i++) {
   if (!document.getElementById("maxPS-0").value) continue;
   maxPeople.push(document.getElementById("maxPS-0").value);
 }
+const minAmt = document.getElementById("minAmtScrip").value;
 
 /*let max_people = glob_data[0][2],
   max_people_scrip,
@@ -70,3 +71,4 @@ if (
 }
 
 console.log(winner);
+alert(winner);
