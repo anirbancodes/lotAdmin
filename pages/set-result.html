@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setres Admin</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h2>>> MyLot</h2>
+    <div style="padding: 10px 20px; display: flex; flex-direction: column">
+      <div style="display: flex">
+        <input type="date" id="date" />
+        &emsp; &emsp;
+        <select
+          name="history-match"
+          id="matchTime"
+          class="btn-submit"
+          style="color: white"
+        >
+          <option value="9:0 AM">9:0 AM</option>
+          <option value="9:15 AM">9:15 AM</option>
+          <option value="9:30 AM">9:30 AM</option>
+          <option value="9:45 AM">9:45 AM</option>
+          <option value="10:0 AM">10:0 AM</option>
+          <option value="10:15 AM">10:15 AM</option>
+          <option value="10:30 AM">10:30 AM</option>
+          <option value="10:45 AM">10:45 AM</option>
+          <option value="11:0 AM">11:0 AM</option>
+          <option value="11:15 AM">11:15 AM</option>
+          <option value="11:30 AM">11:30 AM</option>
+          <option value="11:45 AM">11:45 AM</option>
+          <option value="11:0 AM">11:0 AM</option>
+          <option value="11:15 AM">11:15 AM</option>
+          <option value="11:30 AM">11:30 AM</option>
+          <option value="11:45 AM">11:45 AM</option>
+          <option value="12:0 AM">12:0 PM</option>
+          <option value="12:15 PM">12:15 PM</option>
+          <option value="12:30 PM">12:30 PM</option>
+          <option value="12:45 PM">12:45 PM</option>
+          <option value="1:0 PM">1:0 PM</option>
+          <option value="1:15 PM">1:15 PM</option>
+          <option value="1:30 PM">1:30 PM</option>
+          <option value="1:45 PM">1:45 PM</option>
+          <option value="2:0 PM">2:0 PM</option>
+          <option value="2:15 PM">2:15 PM</option>
+          <option value="2:30 PM">2:30 PM</option>
+          <option value="2:45 PM">2:45 PM</option>
+          <option value="3:0 PM">3:0 PM</option>
+          <option value="3:15 PM">3:15 PM</option>
+          <option value="3:30 PM">3:30 PM</option>
+          <option value="3:45 PM">3:45 PM</option>
+          <option value="4:0 PM">4:0 PM</option>
+          <option value="4:15 PM">4:15 PM</option>
+          <option value="4:30 PM">4:30 PM</option>
+          <option value="4:45 PM">4:45 PM</option>
+          <option value="5:0 PM">5:0 PM</option>
+          <option value="5:15 PM">5:15 PM</option>
+          <option value="5:30 PM">5:30 PM</option>
+          <option value="5:45 PM">5:45 PM</option>
+          <option value="6:0 PM">6:0 PM</option>
+          <option value="6:15 PM">6:15 PM</option>
+          <option value="6:30 PM">6:30 PM</option>
+          <option value="6:45 PM">6:45 PM</option>
+          <option value="7:0 PM">7:0 PM</option>
+          <option value="7:15 PM">7:15 PM</option>
+          <option value="7:30 PM">7:30 PM</option>
+          <option value="7:45 PM">7:45 PM</option>
+          <option value="8:0 PM">8:0 PM</option>
+          <option value="8:15 PM">8:15 PM</option>
+          <option value="8:30 PM">8:30 PM</option>
+          <option value="8:45 PM">8:45 PM</option>
+          <option value="9:0 PM">9:0 PM</option>
+        </select>
+      </div>
+      <br />
+      <input type="number" id="result" style="width: 100px" />
+      <br /><br />
+      <div style="margin-top: 20px; display: flex; align-items: center">
+        <a
+          style="width: 120px; text-align: center"
+          class="btn-submit"
+          id="setBtn"
+          >Set</a
+        >&emsp;&emsp;
+        <a
+          style="width: 120px; text-align: center"
+          class="btn-submit"
+          id="sendCredBtn"
+          >Send Winners</a
+        >
+      </div>
+    </div>
+    <script type="module">
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+      import {
+        getDoc,
+        doc,
+        arrayUnion,
+        runTransaction,
+        increment,
+        getFirestore,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+      const fc = {
+        apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
+        authDomain: "qclottery.firebaseapp.com",
+        projectId: "qclottery",
+        storageBucket: "qclottery.appspot.com",
+        messagingSenderId: "650163027647",
+        appId: "1:650163027647:web:961de905315b549657500a",
+      };
+      const app = initializeApp(fc);
+      const db = getFirestore(app);
+      const auth = getAuth();
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          //  historyTable();
+          // loadUserData(user.email);
+        } else {
+          window.location = "/pages/login.html";
+        }
+      });
+
+      const setBtn = document.getElementById("setBtn");
+      setBtn.addEventListener("click", async () => {
+        let now = new Date();
+        let date =
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        const matchTime = document.getElementById("matchTime").value;
+        const result = document.getElementById("result").value;
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const resDoc = await transaction.get(doc(db, "result", date));
+
+            if (!resDoc.exists()) {
+              transaction.set(doc(db, "result", date), {});
+            }
+
+            transaction.update(
+              doc(db, "result", date),
+              {
+                [`${matchTime}`]: result,
+              },
+              { merge: true }
+            );
+
+            // transaction.update(doc(db, "dealers", email), {
+            //   credit: increment(-1 * amount),
+            // });
+            // transaction.update(
+            //   doc(db, "dealers", email, "offline", "lotto", "games", date),
+            //   {
+            //     [`${drawTime}.${number}`]: arrayUnion({
+            //       time: time + " " + ampm,
+            //       amt: amount,
+            //     }),
+            //   },
+            //   { merge: true }
+            // );
+          });
+          console.log("Transaction successfully committed!");
+        } catch (e) {
+          console.log("Transaction failed: ", e);
+        }
+      });
+
+      const sendCredBtn = document.getElementById("sendCredBtn");
+      sendCredBtn.addEventListener("click", async () => {
+        let winD = [],
+          winA = [],
+          winC = [];
+        let now = new Date();
+        let date =
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        const matchTime = document.getElementById("matchTime").value;
+        const result = document.getElementById("result").value;
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const winners = (
+              await transaction.get(doc(db, "games", date))
+            ).data()[matchTime][result];
+            console.log(winners);
+
+            winners.forEach((winner) => {
+              console.log(winner);
+              if (winner.t == "d") winD.push([winner.email, winner.amt]);
+              else if (winner.t == "c") winC.push([winner.email, winner.amt]);
+              else if (winner.t == "a") winA.push([winner.email, winner.amt]);
+            });
+
+            winD.forEach(async (win) => {
+              transaction.update(doc(db, "dealers", win[0]), {
+                credit: increment(8 * win[1]),
+              });
+
+              transaction.update(
+                doc(db, "dealers", win[0], "offline", "lotto"),
+                {
+                  credit: increment(8 * win[1]),
+                }
+              );
+            });
+            winC.forEach(async (win) => {
+              transaction.update(doc(db, "users", win[0]), {
+                credit: increment(8 * win[1]),
+              });
+            });
+
+            winA.forEach(async (win) => {
+              transaction.update(doc(db, "agents", win[0]), {
+                credit: increment(8 * win[1]),
+              });
+              transaction.update(
+                doc(db, "agents", win[0], "offline", "lotto"),
+                {
+                  credit: increment(8 * win[1]),
+                }
+              );
+            });
+          });
+          alert("Done");
+        } catch (e) {
+          console.log("Transaction failed: ", e);
+        }
+        await winCredD(winD, matchTime, date);
+        await winCredC(winC, matchTime, date);
+        await winCredA(winA, matchTime, date);
+      });
+      async function winCredD(winD, matchTime, date) {
+        winD.forEach(async (win) => {
+          try {
+            await runTransaction(db, async (transaction1) => {
+              const DU = await transaction1.get(
+                doc(db, "dealers", win[0], "offline", "lotto", "credits", date)
+              );
+              if (!DU.exists()) {
+                transaction1.set(
+                  doc(
+                    db,
+                    "dealers",
+                    win[0],
+                    "offline",
+                    "lotto",
+                    "credits",
+                    date
+                  ),
+                  {}
+                );
+              }
+
+              transaction1.update(
+                doc(db, "dealers", win[0], "offline", "lotto", "credits", date),
+                {
+                  [`${matchTime}`]: 8 * win[1],
+                }
+              );
+            });
+            console.log("Yes", win);
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      }
+      async function winCredC(winC, matchTime, date) {
+        winC.forEach(async (win) => {
+          try {
+            await runTransaction(db, async (transaction1) => {
+              const DU = await transaction1.get(
+                doc(db, "users", win[0], "credits", date)
+              );
+              if (!DU.exists()) {
+                transaction1.set(doc(db, "users", win[0], "credits", date), {});
+              }
+
+              transaction1.update(doc(db, "users", win[0], "credits", date), {
+                lotto: arrayUnion({
+                  amt: 8 * win[1],
+                  time: matchTime,
+                  dg: "g",
+                }),
+              });
+            });
+            console.log("Yes", win);
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      }
+      async function winCredA(winA, matchTime, date) {
+        winA.forEach(async (win) => {
+          try {
+            await runTransaction(db, async (transaction1) => {
+              const AU = await transaction1.get(
+                doc(db, "agents", win[0], "offline", "lotto", "credits", date)
+              );
+              if (!AU.exists()) {
+                transaction1.set(
+                  doc(
+                    db,
+                    "agents",
+                    win[0],
+                    "offline",
+                    "lotto",
+                    "credits",
+                    date
+                  ),
+                  {}
+                );
+              }
+
+              transaction1.update(
+                doc(db, "agents", win[0], "offline", "lotto", "credits", date),
+                {
+                  [`${matchTime}`]: 8 * win[1],
+                }
+              );
+            });
+            console.log("Yes", win);
+          } catch (e) {
+            console.log(e);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

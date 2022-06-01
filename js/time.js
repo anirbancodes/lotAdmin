@@ -14,7 +14,7 @@ const optionsQcTime1 = {
   },
 };
 
-let date, time, hms;
+//let date, time, hms;
 
 async function fetchTime() {
   let apiData;
@@ -22,22 +22,24 @@ async function fetchTime() {
     .then((res) => res.json())
     .then((res) => {
       apiData = res;
-      time = res.time;
-      date = res.date;
-      hms = [res.hr, res.min, res.sec, res.ampm];
+      //  time = res.time;
+      // date = res.date;
+      // hms = [res.hr, res.min, res.sec, res.ampm];
     })
     .catch(async (err) => {
       await fetch("https://livetime.p.rapidapi.com/time", optionsLiveTime)
         .then((res) => res.json())
         .then((res) => {
           apiData = res;
-          time = res.time;
-          date = res.date;
-          hms = [res.hr, res.min, res.sec, res.ampm];
+          //   time = res.time;
+          //  date = res.date;
+          //  hms = [res.hr, res.min, res.sec, res.ampm];
         });
     });
   return apiData;
 }
+
+/*
 displayTime();
 async function displayTime() {
   await fetchTime();
@@ -86,5 +88,5 @@ function setGameDrawTime() {
   document.getElementById("draw-time").innerHTML = drawTime;
   document.getElementById("draw-time2").innerHTML = drawTime;
 }
-
+*/
 export { fetchTime };
