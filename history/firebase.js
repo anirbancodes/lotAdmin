@@ -154,35 +154,42 @@ showRes.addEventListener("click", () => {
 
   console.log(people, totBetAmt);
 
-  const marginP = 30; //in %
+  const marginP = document.getElementById("marginP").value; //30; //in %
   const marginAmt = (totBetAmt * (100 - marginP)) / 100;
-  const marginErrorP = 6,
-    peopleErrorP = 6; // in %
-  const minAmtScrip = 2;
+
+  // const marginErrorP = 6,
+  // peopleErrorP = 6; // in %
+  const minAmtScrip = document.getElementById("minAmtScrip").value;
   // 8x
   let winner2,
     c = 0;
   let winner1 = minAmtScrip;
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < people.length; i++) {
     const no = people[i];
     console.log(no, glob_data[no]);
     const noAmt = glob_data[no][0];
     //check if we can afford
     const rewardAmt = noAmt * 8; //8x
-    if (rewardAmt <= marginAmt * (1 + marginErrorP / 100)) {
+    //  if (rewardAmt <= marginAmt * (1 + marginErrorP / 100)) {
+    if (rewardAmt <= marginAmt) {
       if (c >= 2) break;
       if (c == 0) winner1 = no;
       if (c == 1) winner2 = no;
       c++;
     }
   }
-  let winner = winner1;
-  if (
+  /* let winner = winner1;
+   if (
     glob_data[winner1][0] * (1 + marginErrorP / 100) <= glob_data[winner2][0] &&
     glob_data[winner1][1] * (1 + peopleErrorP / 100) <= glob_data[winner2][1]
   ) {
     winner = winner2;
-  }
+  } */
 
-  console.log(winner);
+  console.log(winner1, winner2);
+  document.getElementById("totBetAmt").innerHTML = totBetAmt;
+  document.getElementById("res1").innerHTML = winner1;
+  document.getElementById("res2").innerHTML = winner2;
+  document.getElementById("winAmt1").innerHTML = 8 * glob_data[winner1][0];
+  document.getElementById("winAmt2").innerHTML = 8 * glob_data[winner2][0];
 });
