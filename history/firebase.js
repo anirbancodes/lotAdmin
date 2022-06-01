@@ -67,11 +67,11 @@ async function historyTable(date, match) {
   if (docSnap.exists()) {
     const game = docSnap.data()[match];
     if (game) {
+      glob_data = {};
       for (let i = 0; i < 10; i++) {
         let rowData = "";
         if (!game[i]) {
           glob_data[i] = [0, 0];
-
           continue;
         }
         rowData +=
@@ -125,36 +125,47 @@ const showRes = document.getElementById("showRes");
 showRes.addEventListener("click", () => {
   console.log(glob_data);
 
-  let max_people_scrip,
-    scrip = [];
-  for (let z = 0; z < 10; z++) {
-    let max_people = glob_data[0][2];
-    if (scrip.includes(z)) continue;
+  // let people = [];
+  /*for (let z = 0; z < 10; z++) {
+    if (people.includes(z)) continue;
+    let maxPeopleNo = z;
 
+    let sahiNo;
+    for (let l = 0; l < 10; l++)
+      if (!people.includes(l)) {
+        sahiNo = l;
+        break;
+      }
+
+    let maxPeople = glob_data[sahiNo][1];
     for (let k = 0; k < 10; k++) {
-      // people.push(glob_data[k][2])
-      if (glob_data[k][2] > max_people) {
-        max_people = glob_data[k][2];
-        max_people_scrip = k;
+      if (glob_data[k][1] > maxPeople) {
+        maxPeople = glob_data[k][1];
+        maxPeopleNo = k;
       }
     }
-    // people.push(max_people);
-    scrip.push(max_people_scrip);
+    people.push(maxPeopleNo);
+    console.log(people);
+  }*/
+  for (let i = 0; i < 10; i++) {
+    if (!document.getElementById(`maxPS-${i}`).value) continue;
+    people.push(document.getElementById(`maxPS-${i}`).value);
   }
-  const people = scrip;
-  console.log(people);
+
+  console.log(people, totBetAmt);
 
   const marginP = 30; //in %
   const marginAmt = (totBetAmt * (100 - marginP)) / 100;
   const marginErrorP = 6,
     peopleErrorP = 6; // in %
-  const minAmt = 2;
+  const minAmtScrip = 2;
   // 8x
   let winner2,
     c = 0;
-  let winner1 = minAmt;
+  let winner1 = minAmtScrip;
   for (let i = 0; i < 10; i++) {
     const no = people[i];
+    console.log(no, glob_data[no]);
     const noAmt = glob_data[no][0];
     //check if we can afford
     const rewardAmt = noAmt * 8; //8x

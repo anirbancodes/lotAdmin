@@ -15,16 +15,10 @@
       </div>
     </div>
 
-    <!-- <br /><br />
-    <div>
-      <p style="text-align: center; font-size: 10px">
-        © 2022, PlayLot India. All rights reserved.
-      </p>
-    </div> -->
     <!-- <button id="logoutBtn">Log out</button> -->
     <div style="display: flex; flex-direction: column">
       <a href="/pages/login.html">login</a>
-      <!-- <a href="/pages/signup.html">Add New Dealer</a> -->
+      <a href="/pages/add-super.html">Add Super</a>
       <a href="/history/index.html">history</a>
     </div>
   </body>
@@ -60,7 +54,7 @@
     const auth = getAuth();
 
     const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", (e) => {
+    /* logoutBtn.addEventListener("click", (e) => {
       signOut(auth)
         .then(() => {
           //logout
@@ -68,7 +62,7 @@
         .catch((error) => {
           alert(error);
         });
-    });
+    }); */
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -87,13 +81,6 @@
         let data = docSnap.data();
         showUserCredits(data.credit);
       }
-    }
-
-    function showUserEmail(email) {
-      document.getElementById("profile-email").textContent = email;
-    }
-    function showUserCredits(credit) {
-      document.getElementById("user-credit").textContent = credit;
     }
 
     //game - bet clicked
