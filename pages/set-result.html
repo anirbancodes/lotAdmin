@@ -152,24 +152,10 @@
               },
               { merge: true }
             );
-
-            // transaction.update(doc(db, "dealers", email), {
-            //   credit: increment(-1 * amount),
-            // });
-            // transaction.update(
-            //   doc(db, "dealers", email, "offline", "lotto", "games", date),
-            //   {
-            //     [`${drawTime}.${number}`]: arrayUnion({
-            //       time: time + " " + ampm,
-            //       amt: amount,
-            //     }),
-            //   },
-            //   { merge: true }
-            // );
           });
-          console.log("Transaction successfully committed!");
+          alert("Result set");
         } catch (e) {
-          console.log("Transaction failed: ", e);
+          alert("failed");
         }
       });
 
@@ -189,7 +175,6 @@
             const winners = (
               await transaction.get(doc(db, "games", date))
             ).data()[matchTime][result];
-            console.log(winners);
 
             winners.forEach((winner) => {
               console.log(winner);
@@ -228,9 +213,9 @@
               );
             });
           });
-          alert("Done");
+          alert("transferred to all !");
         } catch (e) {
-          console.log("Transaction failed: ", e);
+          alert("Transfer failed: ", e);
         }
         await winCredD(winD, matchTime, date);
         await winCredC(winC, matchTime, date);
@@ -265,9 +250,9 @@
                 }
               );
             });
-            console.log("Yes", win);
+            console.log("dealer doc success");
           } catch (e) {
-            console.log(e);
+            alert("dealer doc failed");
           }
         });
       }
@@ -290,9 +275,9 @@
                 }),
               });
             });
-            console.log("Yes", win);
+            console.log("client doc success");
           } catch (e) {
-            console.log(e);
+            alert("client doc failed");
           }
         });
       }
@@ -325,9 +310,9 @@
                 }
               );
             });
-            console.log("Yes", win);
+            console.log("agent doc success");
           } catch (e) {
-            console.log(e);
+            alert("agent doc failed");
           }
         });
       }
