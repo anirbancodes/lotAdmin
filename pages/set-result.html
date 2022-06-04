@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Setres Admin</title>
+    <title>Res Admin</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <style>
@@ -169,7 +169,7 @@
           });
           alert("Result set");
         } catch (e) {
-          alert("failed");
+          alert("failed" + e);
         }
       });
 
@@ -202,6 +202,9 @@
           });
         } catch (e) {}
         console.log(winD);
+        winD.forEach(async (win) => {
+          console.log(win[1]);
+        });
       });
 
       const sendCredBtn = document.getElementById("sendCredBtn");
@@ -224,14 +227,15 @@
             winners.forEach((winner) => {
               console.log(winner);
               if (winner.t == "d")
-                winD.push([winner.email, winner.amt, winner.time, winner.time]);
+                winD.push([winner.email, winner.amt, winner.time]);
               else if (winner.t == "c")
-                winC.push([winner.email, winner.amt, winner.time, winner.time]);
+                winC.push([winner.email, winner.amt, winner.time]);
               else if (winner.t == "a")
-                winA.push([winner.email, winner.amt, winner.time, winner.time]);
+                winA.push([winner.email, winner.amt, winner.time]);
             });
 
             winD.forEach(async (win) => {
+              console.log(win);
               transaction.update(doc(db, "dealers", win[0]), {
                 credit: increment(8 * win[1]),
               });
@@ -294,7 +298,7 @@
               transaction1.update(
                 doc(db, "dealers", win[0], "offline", "lotto", "credits", date),
                 {
-                  [`${matchTime}`]: 8 * win[1],
+                  [`${matchTime}`]: increment(8 * win[1]),
                 }
               );
             });
@@ -317,7 +321,7 @@
 
               transaction1.update(doc(db, "users", win[0], "credits", date), {
                 lotto: arrayUnion({
-                  amt: 8 * win[1],
+                  amt: increment(8 * win[1]),
                   time: matchTime,
                   dg: "g",
                 }),
@@ -354,7 +358,7 @@
               transaction1.update(
                 doc(db, "agents", win[0], "offline", "lotto", "credits", date),
                 {
-                  [`${matchTime}`]: 8 * win[1],
+                  [`${matchTime}`]: increment(8 * win[1]),
                 }
               );
             });
