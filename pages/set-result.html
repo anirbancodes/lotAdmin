@@ -91,6 +91,13 @@
           >Send Winners</a
         >
       </div>
+      <br /><br />
+      <a
+        style="width: 120px; text-align: center"
+        class="btn-submit"
+        id="checkWinnersBtn"
+        >Check Winners</a
+      >
     </div>
     <script type="module">
       import {
@@ -159,8 +166,8 @@
         }
       });
 
-      const sendCredBtn = document.getElementById("sendCredBtn");
-      sendCredBtn.addEventListener("click", async () => {
+      const checkWinnersBtn = document.getElementById("checkWinnersBtn");
+      checkWinnersBtn.addEventListener("click", async () => {
         let winD = [],
           winA = [],
           winC = [];
@@ -184,6 +191,37 @@
                 winC.push([winner.email, winner.amt, winner.time]);
               else if (winner.t == "a")
                 winA.push([winner.email, winner.amt, winner.time]);
+            });
+          });
+        } catch (e) {}
+        console.log(winD);
+      });
+
+      const sendCredBtn = document.getElementById("sendCredBtn");
+      sendCredBtn.addEventListener("click", async () => {
+        let winD = [],
+          winA = [],
+          winC = [];
+        let now = new Date();
+        let date =
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        const matchTime = document.getElementById("matchTime").value;
+        const result = document.getElementById("result").value;
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const winners = (
+              await transaction.get(doc(db, "games", date))
+            ).data()[matchTime][result];
+
+            winners.forEach((winner) => {
+              console.log(winner);
+              if (winner.t == "d")
+                winD.push([winner.email, winner.amt, winner.time, winner.time]);
+              else if (winner.t == "c")
+                winC.push([winner.email, winner.amt, winner.time, winner.time]);
+              else if (winner.t == "a")
+                winA.push([winner.email, winner.amt, winner.time, winner.time]);
             });
 
             winD.forEach(async (win) => {
