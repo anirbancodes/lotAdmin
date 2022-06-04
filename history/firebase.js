@@ -50,6 +50,7 @@ let amt = [],
 //   document.getElementById("user-credit").textContent = credit;
 // }
 async function historyTable(date, match) {
+  totBetAmt = 0;
   document.getElementById("sale-table").innerHTML = "";
   document.getElementById("comment-text").innerHTML = "";
   if (!date) {
@@ -108,6 +109,7 @@ async function historyTable(date, match) {
 }
 const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {
+  totBetAmt = 0;
   let date = document.getElementById("date").value;
   let match = document.getElementById("history-match").value;
 
