@@ -178,9 +178,12 @@
 
             winners.forEach((winner) => {
               console.log(winner);
-              if (winner.t == "d") winD.push([winner.email, winner.amt]);
-              else if (winner.t == "c") winC.push([winner.email, winner.amt]);
-              else if (winner.t == "a") winA.push([winner.email, winner.amt]);
+              if (winner.t == "d")
+                winD.push([winner.email, winner.amt, winner.time]);
+              else if (winner.t == "c")
+                winC.push([winner.email, winner.amt, winner.time]);
+              else if (winner.t == "a")
+                winA.push([winner.email, winner.amt, winner.time]);
             });
 
             winD.forEach(async (win) => {
