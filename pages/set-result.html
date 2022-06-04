@@ -86,14 +86,14 @@
       <br /><br />
       <div style="margin-top: 20px; display: flex; align-items: center">
         <a
-          style="width: 120px; text-align: center"
-          class="btn-submit"
+          style="width: 40px; font-weight: 600; text-align: center"
+          class="btn-short"
           id="setBtn"
           >Set</a
         >&emsp;&emsp;
         <a
-          style="width: 120px; text-align: center"
-          class="btn-submit"
+          style="width: 120px; text-align: center; font-weight: 600"
+          class="btn-short"
           id="sendCredBtn"
           >Send Winners</a
         >
@@ -168,6 +168,7 @@
               { merge: true }
             );
           });
+          setBtn.style.display = "none";
           alert("Result set");
         } catch (e) {
           alert("result set failed" + e);
@@ -281,7 +282,7 @@
         } catch (e) {
           alert("winner list not retrieved: " + e);
         }
-
+        sendCredBtn.style.display = "none";
         await func2(winD, winC, winA);
         await func3(winD, winA, winC, matchTime, date);
 
