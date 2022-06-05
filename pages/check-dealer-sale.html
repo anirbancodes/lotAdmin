@@ -4,18 +4,40 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Send Super Credits</title>
+    <title>Admin DSale</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <h2>>>MyLot</h2>
-    <input type="email" placeholder="super email" id="superEmail" />
-    <br /><br />
-    <input type="number" placeholder="0" id="amount" />
-    <br /><br />
-    <button class="btn-submit" id="sendCredBtn">sendCred</button>
-    <button class="btn-submit" id="minusCredBtn">minusCred</button>
-    <br /><br />
+    <input type="date" id="date"> <br><br>
+    <input type="email" placeholder="dealer email" id="dEmail" />
+   
+    <div style="display: flex; justify-content: center; margin-top: 15px">
+
+      <a id="showBtn" class="btn-submit">Show</a>
+    </div>
+
+    <div class="container">
+      <ul class="sale-table" id="sale-tbody"></ul>
+    </div>
+    <hr style="width: 45vw" />
+    <p style="text-align: center; font-size: 18px">
+      <strong>Total Sale: <span id="dayTotSale">0</span></strong>
+    </p>
+    <p style="text-align: center; font-size: 18px">
+      <strong>Total Win: <span id="dayTotWin">0</span></strong>
+    </p>
+   
+    <p style="text-align: center; font-size: 18px">
+      <strong>Profit: <span id="profit">0</span></strong>
+    </p>
+    <p style="text-align: center; font-size: 18px">
+      <strong>11% of sale: <span id="comm">0</span></strong>
+    </p>
+    <p style="text-align: center; font-size: 18px">
+      <strong>Company gets: <span id="weget">0</span></strong>
+    </p>
+  </div>
     <br /><br />
     <a class="btn-submit" href="/">Home</a>
     <div id="superList"></div>
@@ -57,119 +79,157 @@
           window.location = "/pages/login.html";
         }
       });
-
-      const sendCredBtn = document.getElementById("sendCredBtn");
-      sendCredBtn.addEventListener("click", async () => {
-        const superEmail = document.getElementById("superEmail").value;
-        const amount = document.getElementById("amount").value;
-
-        let apiT = await fetchTime();
-        let time = apiT.time,
-          date = apiT.date,
-          ampm = apiT.ampm;
+let sale=0,win=0,p=0, comm=0;
+      async function saleBody(email, date) {
         if (!date) {
           let now = new Date();
-          date =
+          let date1 =
             now.getFullYear() +
             "-" +
             (now.getMonth() + 1) +
             "-" +
             now.getDate();
+          date = date1;
         }
-        if (!time) {
-          time = "";
-        }
+        document.getElementById("dayTotSale").innerHTML = "-";
+        const directref = doc(
+          db,
+          "dealers",
+          email,
+          "offline",
+          "lotto",
+          "sale",
+          date
+        );
+        const docSnap1 = await getDoc(directref);
 
-        try {
-          await runTransaction(db, async (transaction) => {
-            const credDoc = await transaction.get(
-              doc(db, "super", superEmail, "credits", date)
-            );
-
-            if (!credDoc.exists()) {
-              transaction.set(
-                doc(db, "super", superEmail, "credits", date),
-                {}
-              );
-            }
-
-            transaction.update(
-              doc(db, "super", superEmail, "credits", date),
-              {
-                quickplay: arrayUnion({
-                  time: time + " " + ampm,
-                  amt: amount,
-                  email: "QuickPlay",
-                }),
-              },
-              { merge: true }
-            );
-
-            transaction.update(doc(db, "super", superEmail), {
-              credit: increment(amount),
+        const indirectref = doc(db, "dealers", email, "agentsale", date);
+        const docSnap2 = await getDoc(indirectref);
+        let total = 0;
+        if (!docSnap1.exists() && !docSnap2.exists()) {
+          document.getElementById("dayTotSale").innerHTML =
+            "No sale on " + date;
+        } else {
+          if (docSnap1.exists()) {
+            const saleD = docSnap1.data();
+            let keys = Object.keys(saleD);
+            keys.forEach((dtime) => {
+              total += saleD[dtime];
             });
-          });
-          alert("success");
-        } catch (e) {
-          alert("failed");
+          }
+          if (docSnap2.exists()) {
+            const saleI = docSnap2.data();
+            total += saleI.sale;
+          }
+
+          /* document.getElementById(
+        "sale-tbody"
+      ).innerHTML = `<li class="table-header">
+            <div class="col">Match</div>
+            <div class="col">Sale</div>
+          </li>`;
+      let totsale = 0;
+      let keys = Object.keys(sale);
+      keys.forEach((dtime) => {
+        totsale += sale[dtime];
+        document.getElementById("sale-tbody").innerHTML +=
+          `<li class="table-row">
+      <div class="col" data-label="Job Id">` +
+          dtime +
+          `</div>
+      <div class="col" data-label="Customer Name" >` +
+          sale[dtime] +
+          `</div>
+    </li>`;
+      }); */
+      sale=total;
+      comm = 0.11 * total;
+          document.getElementById("dayTotSale").innerHTML = total;
         }
-      });
-
-      const minusCredBtn = document.getElementById("minusCredBtn");
-      minusCredBtn.addEventListener("click", async () => {
-        const superEmail = document.getElementById("superEmail").value;
-        const amount = document.getElementById("amount").value;
-
-        let apiT = await fetchTime();
-        let time = apiT.time,
-          date = apiT.date,
-          ampm = apiT.ampm;
+      }
+      async function winBody(email, date) {
         if (!date) {
           let now = new Date();
-          date =
+          let date1 =
             now.getFullYear() +
             "-" +
             (now.getMonth() + 1) +
             "-" +
             now.getDate();
+          date = date1;
         }
-        if (!time) {
-          time = "";
-        }
+        document.getElementById("dayTotWin").innerHTML = "-";
+        const directref = doc(
+          db,
+          "dealers",
+          email,
+          "offline",
+          "lotto",
+          "credits",
+          date
+        );
+        const docSnap1 = await getDoc(directref);
 
-        try {
-          await runTransaction(db, async (transaction) => {
-            const credDoc = await transaction.get(
-              doc(db, "super", superEmail, "credits", date)
-            );
-
-            if (!credDoc.exists()) {
-              transaction.set(
-                doc(db, "super", superEmail, "credits", date),
-                {}
-              );
-            }
-
-            transaction.update(
-              doc(db, "super", superEmail, "credits", date),
-              {
-                quickplay: arrayUnion({
-                  time: time + " " + ampm,
-                  amt: -1 * amount,
-                  email: "QuickPlay",
-                }),
-              },
-              { merge: true }
-            );
-
-            transaction.update(doc(db, "super", superEmail), {
-              credit: increment(-1 * amount),
+       // const indirectref = doc(db, "dealers", email, "agentsale", date);
+      //  const docSnap2 = await getDoc(indirectref);
+        let total = 0;
+      //  // if (!docSnap1.exists() && !docSnap2.exists()) {
+      //     document.getElementById("dayTotSale").innerHTML =
+      //       "No sale on " + date;
+      //   } else {
+          if (docSnap1.exists()) {
+            const saleD = docSnap1.data();
+            let keys = Object.keys(saleD);
+            keys.forEach((dtime) => {
+              total += saleD[dtime];
             });
-          });
-          alert("success");
-        } catch (e) {
-          alert("failed");
-        }
+          }
+       //   if (docSnap2.exists()) {
+         //   const saleI = docSnap2.data();
+          //  total += saleI.sale;
+          //}
+
+          /* document.getElementById(
+        "sale-tbody"
+      ).innerHTML = `<li class="table-header">
+            <div class="col">Match</div>
+            <div class="col">Sale</div>
+          </li>`;
+      let totsale = 0;
+      let keys = Object.keys(sale);
+      keys.forEach((dtime) => {
+        totsale += sale[dtime];
+        document.getElementById("sale-tbody").innerHTML +=
+          `<li class="table-row">
+      <div class="col" data-label="Job Id">` +
+          dtime +
+          `</div>
+      <div class="col" data-label="Customer Name" >` +
+          sale[dtime] +
+          `</div>
+    </li>`;
+      }); */
+      win=total
+          document.getElementById("dayTotWin").innerHTML = total;
+        
+      }
+      const showBtn = document.getElementById("showBtn");
+      showBtn.addEventListener("click", () => {
+        let date = document.getElementById("date").value;
+        let i1 = date.indexOf("-"),
+          i2 = date.lastIndexOf("-");
+        date =
+          date.substring(0, i1 + 1) +
+          (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+          "-" +
+          (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+        const params = new URL(document.location).searchParams;
+        const dEmail = document.getElementById("dEmail").value
+        saleBody(dEmail, date);
+        winBody(dEmail, date);
+        document.getElementById("profit").innerHTML=sale-win;
+        document.getElementById("comm").innerHTML=comm;
+        document.getElementById("weget").innerHTML=sale-win-comm;
       });
     </script>
   </body>
