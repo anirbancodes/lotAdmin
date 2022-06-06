@@ -17,40 +17,38 @@
 
     <!-- <button id="logoutBtn">Log out</button> -->
     <div style="display: flex; flex-direction: column">
-      <a class="btn-submit" style="width: 90px" href="/pages/login.html"
+      <!-- <a class="btn-submit" style="width: 90px" href="/pages/login.html"
         >login</a
-      ><br />
-      <a class="btn-submit" style="width: 90px" href="/pages/add-super.html"
-        >Add Super</a
-      ><br />
-      <a class="btn-submit" style="width: 90px" href="/history/index.html"
+      ><br /> -->
+      <a
+        class="btn-submit"
+        style="width: max-content"
+        href="/history/index.html"
         >Result</a
       ><br />
       <a
-        class="btn-submit"
-        style="width: 90px"
+        class="btn-short"
+        style="width: max-content"
+        href="/pages/add-super.html"
+        >Create new Super</a
+      ><br />
+
+      <a
+        class="btn-short"
+        style="width: max-content"
         href="/pages/send-credits-super.html"
-        >Cred Super</a
+        >Credit Transfer - Super</a
       ><br />
       <a
-        class="btn-submit"
-        style="width: 120px"
+        class="btn-short"
+        style="width: max-content; color: orangered; text-decoration: overline"
         href="/pages/check-dealer-sale.html"
-        >Dealer Sale</a
+        >Sale - Dealer</a
       ><br />
     </div>
   </body>
 
   <script type="module">
-    const firebaseConfig = {
-      apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
-      authDomain: "qclottery.firebaseapp.com",
-      projectId: "qclottery",
-      storageBucket: "qclottery.appspot.com",
-      messagingSenderId: "650163027647",
-      appId: "1:650163027647:web:961de905315b549657500a",
-    };
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 
     import {
@@ -58,6 +56,7 @@
       onAuthStateChanged,
       signOut,
     } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { fc } from "/js/c.js";
     import {
       getDoc,
       doc,
@@ -67,11 +66,11 @@
     } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-    const app = initializeApp(firebaseConfig);
+    const app = initializeApp(fc);
     const db = getFirestore(app);
     const auth = getAuth();
 
-    const logoutBtn = document.getElementById("logoutBtn");
+    //const logoutBtn = document.getElementById("logoutBtn");
     /* logoutBtn.addEventListener("click", (e) => {
       signOut(auth)
         .then(() => {
@@ -85,72 +84,21 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        showUserEmail(user.email);
-        loadUserData(user.email);
+        // showUserEmail(user.email);
+        // loadUserData(user.email);
       } else {
         window.location = "/pages/login.html";
       }
     });
 
-    async function loadUserData(email) {
-      const ref = doc(db, "users", email);
-      const docSnap = await getDoc(ref);
-      if (docSnap.exists()) {
-        let data = docSnap.data();
-        showUserCredits(data.credit);
-      }
-    }
-
-    //game - bet clicked
-    async function play(number, amount) {
-      const user = auth.currentUser;
-      const email = user.email;
-      const ref = doc(db, "users", email);
-      const docSnap = await getDoc(ref);
-      if (docSnap.exists()) {
-        let data = docSnap.data();
-        if (amount <= data.credit) {
-          const date = 220423; //getDate();
-          await updateDoc(
-            doc(db, "users", email),
-            {
-              [`games.${date}`]: {
-                amt: amount,
-                scrip: number,
-                won: false,
-              },
-              credit: data.credit - amount,
-              credits: arrayUnion({ time: date, trans: amount }),
-            },
-            { merge: true }
-          );
-          window.location = "/";
-          //update game details
-        } else {
-          alert("insufficient credits, add credits");
-        }
-      }
-    }
-
-    const btn = document.getElementById("btn-submit");
-    btn.addEventListener("click", async (e) => {
-      const bet_amt = document.getElementById("bet-amt").value;
-      let bet_no;
-      let ele = document.getElementsByName("scrip");
-      for (let i = 0; i < ele.length; i++) {
-        if (ele[i].checked) bet_no = ele[i].value;
-      }
-
-      play(bet_no, bet_amt);
-
-      const email = auth.currentUser.email;
-      const ref = doc(db, "users", email); //update credits
-      const docSnap = await getDoc(ref);
-      if (docSnap.exists()) {
-        let data = docSnap.data();
-        showUserCredits(data.credit);
-      }
-    });
+    // async function loadUserData(email) {
+    //   const ref = doc(db, "users", email);
+    //   const docSnap = await getDoc(ref);
+    //   if (docSnap.exists()) {
+    //     let data = docSnap.data();
+    //     showUserCredits(data.credit);
+    //   }
+    // }
   </script>
   <script></script>
 </html>

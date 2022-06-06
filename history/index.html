@@ -17,6 +17,9 @@
     h3 {
       font-family: "Poppins", sans-serif;
     }
+    p {
+      font-size: 14px;
+    }
 
     @media all and (max-width: 767px) {
       .table-header {
@@ -66,8 +69,14 @@
       <div style="display: flex; justify-content: space-between">
         <h2>>> MyLot</h2>
         <h3 class="margin-left-pc" id="time-counter"></h3>
-        <a class="btn-submit" href="/pages/set-result.html">Set Result</a>
+        <a
+          class="btn-submit"
+          style="width: max-content; height: fit-content; margin-top: 6px"
+          href="/pages/set-result.html"
+          >Set Result</a
+        >
       </div>
+
       <!-- <div class="header-user">
         <p class="mob-margin-top-less-15" id="profile-name">Dealer:&nbsp;</p>
         <p class="mob-margin-top-less-15">
@@ -93,76 +102,86 @@
       </div> 
     </div> -->
 
-    <div style="padding: 10px 20px; display: flex; flex-direction: column">
-      <div style="display: flex">
-        <input type="date" id="date" />
-        &emsp; &emsp;
-        <select
-          name="history-match"
-          id="history-match"
-          class="btn-submit"
-          style="color: white"
-        >
-          <option value="9:0 AM">9:0 AM</option>
-          <option value="9:15 AM">9:15 AM</option>
-          <option value="9:30 AM">9:30 AM</option>
-          <option value="9:45 AM">9:45 AM</option>
-          <option value="10:0 AM">10:0 AM</option>
-          <option value="10:15 AM">10:15 AM</option>
-          <option value="10:30 AM">10:30 AM</option>
-          <option value="10:45 AM">10:45 AM</option>
-          <option value="11:0 AM">11:0 AM</option>
-          <option value="11:15 AM">11:15 AM</option>
-          <option value="11:30 AM">11:30 AM</option>
-          <option value="11:45 AM">11:45 AM</option>
-          <option value="12:0 PM">12:0 PM</option>
-          <option value="12:15 PM">12:15 PM</option>
-          <option value="12:30 PM">12:30 PM</option>
-          <option value="12:45 PM">12:45 PM</option>
-          <option value="1:0 PM">1:0 PM</option>
-          <option value="1:15 PM">1:15 PM</option>
-          <option value="1:30 PM">1:30 PM</option>
-          <option value="1:45 PM">1:45 PM</option>
-          <option value="2:0 PM">2:0 PM</option>
-          <option value="2:15 PM">2:15 PM</option>
-          <option value="2:30 PM">2:30 PM</option>
-          <option value="2:45 PM">2:45 PM</option>
-          <option value="3:0 PM">3:0 PM</option>
-          <option value="3:15 PM">3:15 PM</option>
-          <option value="3:30 PM">3:30 PM</option>
-          <option value="3:45 PM">3:45 PM</option>
-          <option value="4:0 PM">4:0 PM</option>
-          <option value="4:15 PM">4:15 PM</option>
-          <option value="4:30 PM">4:30 PM</option>
-          <option value="4:45 PM">4:45 PM</option>
-          <option value="5:0 PM">5:0 PM</option>
-          <option value="5:15 PM">5:15 PM</option>
-          <option value="5:30 PM">5:30 PM</option>
-          <option value="5:45 PM">5:45 PM</option>
-          <option value="6:0 PM">6:0 PM</option>
-          <option value="6:15 PM">6:15 PM</option>
-          <option value="6:30 PM">6:30 PM</option>
-          <option value="6:45 PM">6:45 PM</option>
-          <option value="7:0 PM">7:0 PM</option>
-          <option value="7:15 PM">7:15 PM</option>
-          <option value="7:30 PM">7:30 PM</option>
-          <option value="7:45 PM">7:45 PM</option>
-          <option value="8:0 PM">8:0 PM</option>
-          <option value="8:15 PM">8:15 PM</option>
-          <option value="8:30 PM">8:30 PM</option>
-          <option value="8:45 PM">8:45 PM</option>
-          <option value="9:0 PM">9:0 PM</option>
-        </select>
-      </div>
-      <div style="margin-top: 20px; display: flex; align-items: center">
-        <a
-          style="width: 40vw; text-align: center"
-          class="btn-submit"
-          id="showBtn"
-          >Show</a
-        >
-      </div>
+    <div style="display: flex">
+      <input
+        style="padding: 0 10px; width: 120px; height: 40px"
+        type="date"
+        class="btn-short"
+        id="date"
+      />
+      &emsp; &emsp;
+      <select
+        name="history-match"
+        style="padding: 0 10px; width: 120px; height: 40px"
+        id="history-match"
+        class="btn-short"
+      >
+        <option value="9:0 AM">9:0 AM</option>
+        <option value="9:15 AM">9:15 AM</option>
+        <option value="9:30 AM">9:30 AM</option>
+        <option value="9:45 AM">9:45 AM</option>
+        <option value="10:0 AM">10:0 AM</option>
+        <option value="10:15 AM">10:15 AM</option>
+        <option value="10:30 AM">10:30 AM</option>
+        <option value="10:45 AM">10:45 AM</option>
+        <option value="11:0 AM">11:0 AM</option>
+        <option value="11:15 AM">11:15 AM</option>
+        <option value="11:30 AM">11:30 AM</option>
+        <option value="11:45 AM">11:45 AM</option>
+        <option value="12:0 PM">12:0 PM</option>
+        <option value="12:15 PM">12:15 PM</option>
+        <option value="12:30 PM">12:30 PM</option>
+        <option value="12:45 PM">12:45 PM</option>
+        <option value="1:0 PM">1:0 PM</option>
+        <option value="1:15 PM">1:15 PM</option>
+        <option value="1:30 PM">1:30 PM</option>
+        <option value="1:45 PM">1:45 PM</option>
+        <option value="2:0 PM">2:0 PM</option>
+        <option value="2:15 PM">2:15 PM</option>
+        <option value="2:30 PM">2:30 PM</option>
+        <option value="2:45 PM">2:45 PM</option>
+        <option value="3:0 PM">3:0 PM</option>
+        <option value="3:15 PM">3:15 PM</option>
+        <option value="3:30 PM">3:30 PM</option>
+        <option value="3:45 PM">3:45 PM</option>
+        <option value="4:0 PM">4:0 PM</option>
+        <option value="4:15 PM">4:15 PM</option>
+        <option value="4:30 PM">4:30 PM</option>
+        <option value="4:45 PM">4:45 PM</option>
+        <option value="5:0 PM">5:0 PM</option>
+        <option value="5:15 PM">5:15 PM</option>
+        <option value="5:30 PM">5:30 PM</option>
+        <option value="5:45 PM">5:45 PM</option>
+        <option value="6:0 PM">6:0 PM</option>
+        <option value="6:15 PM">6:15 PM</option>
+        <option value="6:30 PM">6:30 PM</option>
+        <option value="6:45 PM">6:45 PM</option>
+        <option value="7:0 PM">7:0 PM</option>
+        <option value="7:15 PM">7:15 PM</option>
+        <option value="7:30 PM">7:30 PM</option>
+        <option value="7:45 PM">7:45 PM</option>
+        <option value="8:0 PM">8:0 PM</option>
+        <option value="8:15 PM">8:15 PM</option>
+        <option value="8:30 PM">8:30 PM</option>
+        <option value="8:45 PM">8:45 PM</option>
+        <option value="9:0 PM">9:0 PM</option>
+      </select>
     </div>
+    <div style="margin-top: 20px; display: flex; align-items: center">
+      <a
+        style="
+          padding: 6px 10px;
+          width: 80px;
+          height: fit-content;
+          font-size: 18px;
+          text-align: center;
+        "
+        class="btn-plum"
+        id="showBtn"
+        >Show</a
+      >
+    </div>
+
     <div style="padding: 10px 20px">
       <div style="display: flex; justify-content: space-around">
         <p>Scrip</p>
