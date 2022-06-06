@@ -160,51 +160,36 @@
               transaction.set(doc(db, "result", date), {});
             }
 
-            transaction.update(
-              doc(db, "result", date),
-              {
-                [`${matchTime}`]: result,
-              },
-              { merge: true }
-            );
+            const alreadySet = resDoc.data()[matchTime] ? true : false;
+            if (alreadySet == true) {
+              const confirm = prompt("exists, update?", "y/n");
+              if (confirm == "y") {
+                transaction.update(
+                  doc(db, "result", date),
+                  {
+                    [`${matchTime}`]: result,
+                  },
+                  { merge: true }
+                );
+                setBtn.style.display = "none";
+                alert("Result set");
+              } else return;
+            } else {
+              transaction.update(
+                doc(db, "result", date),
+                {
+                  [`${matchTime}`]: result,
+                },
+                { merge: true }
+              );
+              setBtn.style.display = "none";
+              alert("Result set");
+            }
           });
-          setBtn.style.display = "none";
-          alert("Result set");
         } catch (e) {
           alert("result set failed" + e);
         }
       });
-
-      /*const checkWinnersBtn = document.getElementById("checkWinnersBtn");
-      checkWinnersBtn.addEventListener("click", async () => {
-        let winD = [],
-          winA = [],
-          winC = [];
-        let now = new Date();
-        let date =
-          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-        const matchTime = document.getElementById("matchTime").value;
-        const result = document.getElementById("result").value;
-
-        try {
-          await runTransaction(db, async (transaction) => {
-            const winners = (
-              await transaction.get(doc(db, "games", date))
-            ).data()[matchTime][result];
-
-            winners.forEach((winner) => {
-              console.log(winner);
-              if (winner.t == "d")
-                winD.push([winner.email, winner.amt, winD.length]);
-              else if (winner.t == "c")
-                winC.push([winner.email, winner.amt, winC.length]);
-              else if (winner.t == "a")
-                winA.push([winner.email, winner.amt, winA.length]);
-            });
-          });
-        } catch (e) {}
-        console.log(winD);
-      });*/
 
       async function func2(winD, winC, winA) {
         try {
@@ -286,10 +271,9 @@
         await func2(winD, winC, winA);
         await func3(winD, winA, winC, matchTime, date);
 
-        alert("Wait 10 sec... transferring to all ");
+        alert("Wait 5 sec... transferring to all ");
       });
       async function func3(winD, winA, winC, matchTime, date) {
-        console.log("f3");
         await winCredD(winD, matchTime, date);
         await winCredC(winC, matchTime, date);
         await winCredA(winA, matchTime, date);
