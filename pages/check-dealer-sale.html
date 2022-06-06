@@ -214,7 +214,7 @@ let sale=0,win=0,p=0, comm=0;
         
       }
       const showBtn = document.getElementById("showBtn");
-      showBtn.addEventListener("click", () => {
+      showBtn.addEventListener("click", async () => {
         let date = document.getElementById("date").value;
         let i1 = date.indexOf("-"),
           i2 = date.lastIndexOf("-");
@@ -225,8 +225,8 @@ let sale=0,win=0,p=0, comm=0;
           (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
         const params = new URL(document.location).searchParams;
         const dEmail = document.getElementById("dEmail").value
-        saleBody(dEmail, date);
-        winBody(dEmail, date);
+        await saleBody(dEmail, date);
+        await winBody(dEmail, date);
         document.getElementById("profit").innerHTML=sale-win;
         document.getElementById("comm").innerHTML=comm;
         document.getElementById("weget").innerHTML=sale-win-comm;
