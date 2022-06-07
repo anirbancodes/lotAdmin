@@ -49,6 +49,7 @@ let amt = [],
 //   document.getElementById("profile-name").textContent += name;
 //   document.getElementById("user-credit").textContent = credit;
 // }
+
 async function historyTable(date, match) {
   totBetAmt = 0;
   document.getElementById("sale-table").innerHTML = "";
@@ -62,6 +63,7 @@ async function historyTable(date, match) {
   if (!match) {
     match = "9:0 AM";
   }
+
   const ref = doc(db, "games", date);
 
   const docSnap = await getDoc(ref);
@@ -92,11 +94,14 @@ async function historyTable(date, match) {
           peopleS++;
         });
         rowData +=
+          `
+        <span style="color: orangered">` +
           amtS +
-          `</p>
+          `</span>
+          </p>
           <p>` +
           peopleS +
-          `</p></div><div style="text-align:center; margin-top:-25px">`;
+          `</p></div><div style="text-align:center; margin-top:-15px; color:#B0C4DE">`;
 
         arr.forEach(
           (sc) => (rowData += `<span style="font-size:10px">+${sc}</span>`)
