@@ -75,8 +75,10 @@ async function historyTable(date, match) {
           glob_data[i] = [0, 0];
           continue;
         }
+        let arr = [];
         rowData +=
-          ` <div class="line white-card">
+          ` <div class="white-card">
+          <div class="line">
           <p class="number">` +
           i +
           `</p>
@@ -86,6 +88,7 @@ async function historyTable(date, match) {
         let keys = Object.keys(game[i]);
         keys.forEach((scrip) => {
           amtS += game[i][scrip].amt;
+          arr.push(game[i][scrip].amt);
           peopleS++;
         });
         rowData +=
@@ -93,14 +96,20 @@ async function historyTable(date, match) {
           `</p>
           <p>` +
           peopleS +
-          `</p>
-          </div>
+          `</p></div><div style="text-align:center; margin-top:-25px">`;
+
+        arr.forEach(
+          (sc) => (rowData += `<span style="font-size:10px">+${sc}</span>`)
+        );
+        rowData += `
+          </div></div>
       </div>`;
         document.getElementById("sale-table").innerHTML += rowData;
         glob_data[i] = [amtS, peopleS];
         totBetAmt += amtS;
         // people.push(peopleS);
       }
+      document.getElementById("totbetamt").innerHTML = totBetAmt;
     } else {
       document.getElementById("comment-text").innerHTML =
         "No history for " + date + " " + match;
