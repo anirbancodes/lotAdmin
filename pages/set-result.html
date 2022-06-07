@@ -159,10 +159,12 @@
             if (!resDoc.exists()) {
               transaction.set(doc(db, "result", date), {});
             }
+            // const resDoc = await transaction.get(doc(db, "result", date));
 
-            const alreadySet = resDoc.data()[matchTime] ? true : false;
+            let alreadySet = resDoc.data()[matchTime] ? true : false;
+
             if (alreadySet == true) {
-              const confirm = prompt("exists, update?", "y/n");
+              const confirm = prompt("already exists, update?", "y/n");
               if (confirm == "y") {
                 transaction.update(
                   doc(db, "result", date),
@@ -187,6 +189,7 @@
             }
           });
         } catch (e) {
+          console.error(e);
           alert("result set failed" + e);
         }
       });
