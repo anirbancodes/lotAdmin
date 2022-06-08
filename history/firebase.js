@@ -54,6 +54,7 @@ async function historyTable(date, match) {
   totBetAmt = 0;
   document.getElementById("sale-table").innerHTML = "";
   document.getElementById("comment-text").innerHTML = "";
+  document.getElementById("totbetamt").innerHTML = "";
   if (!date) {
     let now = new Date();
     let date1 =
@@ -116,6 +117,7 @@ async function historyTable(date, match) {
       }
       document.getElementById("totbetamt").innerHTML = totBetAmt;
     } else {
+      document.getElementById("totbetamt").innerHTML = 0;
       document.getElementById("comment-text").innerHTML =
         "No history for " + date + " " + match;
     }
