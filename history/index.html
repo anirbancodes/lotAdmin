@@ -12,7 +12,9 @@
     body {
       font-family: "lato", sans-serif;
     }
-
+    #marginP::placeholder {
+      color: white;
+    }
     h2,
     h3 {
       font-family: "Poppins", sans-serif;
@@ -161,7 +163,7 @@
       <p style="margin-left: 60px">Total Bet: <span id="totbetamt"></span></p>
     </div>
 
-    <div style="padding: 10px 20px">
+    <div style="padding: 10px 20px; margin-top: -10px">
       <div style="display: flex; justify-content: space-around">
         <p>Scrip</p>
         <p>Amount</p>
@@ -191,7 +193,7 @@
       <input
         class="btn-submit"
         placeholder="0"
-        style="width: 35px"
+        style="width: 35px; font-size: 14px"
         id="marginP"
         type="number"
       />
