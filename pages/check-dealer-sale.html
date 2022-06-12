@@ -10,12 +10,13 @@
   <body>
     <h2>>>MyLot</h2>
     <input type="date" id="date"> <br><br>
-    <input type="email" placeholder="dealer email" id="dEmail" />
+    <!-- <input type="email" placeholder="dealer email" id="dEmail" /> -->
+    <div id="dealer-list"></div>
    
-    <div style="display: flex; justify-content: center; margin-top: 15px">
+    <!-- <div style="display: flex; justify-content: center; margin-top: 15px">
 
       <a id="showBtn" class="btn-submit">Show</a>
-    </div>
+    </div> -->
 
     <div class="container">
       <ul class="sale-table" id="sale-tbody"></ul>
@@ -70,18 +71,57 @@
       const db = getFirestore(app);
       const auth = getAuth();
 
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
           const uid = user.uid;
-          //showSupers();
+          await showDealers();
           // loadUserData(user.email);
         } else {
           window.location = "/pages/login.html";
         }
       });
+    
 let sale=0,win=0,p=0, comm=0;
-      async function saleBody(email, date) {
-        if (!date) {
+
+async function addF(emails) {
+        emails.forEach(d => {
+          let dbutt = document.getElementById(d);
+          dbutt.addEventListener("click", async(e) => {
+            console.log("click")
+            await saleBody(d);
+            await winBody(d);
+        document.getElementById("profit").innerHTML=sale-win;
+        document.getElementById("comm").innerHTML=comm;
+        document.getElementById("weget").innerHTML=sale-win-comm;
+          })
+        })
+        
+      }
+
+async function showDealers(){
+  let emails =[]
+        document.getElementById("dealer-list").innerHTML =""
+        const dealers =  (await getDoc(doc(db, "members", "dealers"))).data().mylot;
+        dealers.forEach((d) =>{
+          console.log(d)
+          document.getElementById("dealer-list").innerHTML += `<div class="white-card" id="`+d+`">`+d+`</div>`;
+         emails.push(d)
+        })
+        await addF(emails);
+      }
+      
+
+      async function saleBody(email) {
+        let date = document.getElementById("date").value;
+        if(date){
+        let i1 = date.indexOf("-"),
+          i2 = date.lastIndexOf("-");
+        date =
+          date.substring(0, i1 + 1) +
+          (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+          "-" +
+          (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;}
+        else if (!date) {
           let now = new Date();
           let date1 =
             now.getFullYear() +
@@ -92,6 +132,9 @@ let sale=0,win=0,p=0, comm=0;
           date = date1;
         }
         document.getElementById("dayTotSale").innerHTML = "-";
+        document.getElementById("profit").innerHTML="";
+        document.getElementById("comm").innerHTML="";
+        document.getElementById("weget").innerHTML="";
         const directref = doc(
           db,
           "dealers",
@@ -147,8 +190,17 @@ let sale=0,win=0,p=0, comm=0;
           document.getElementById("dayTotSale").innerHTML = total;
         }
       }
-      async function winBody(email, date) {
-        if (!date) {
+      async function winBody(email) {
+        let date = document.getElementById("date").value;
+        if(date){
+        let i1 = date.indexOf("-"),
+          i2 = date.lastIndexOf("-");
+        date =
+          date.substring(0, i1 + 1) +
+          (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+          "-" +
+          (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;}
+        else if (!date) {
           let now = new Date();
           let date1 =
             now.getFullYear() +
@@ -158,6 +210,16 @@ let sale=0,win=0,p=0, comm=0;
             now.getDate();
           date = date1;
         }
+        // if (!date) {
+        //   let now = new Date();
+        //   let date1 =
+        //     now.getFullYear() +
+        //     "-" +
+        //     (now.getMonth() + 1) +
+        //     "-" +
+        //     now.getDate();
+        //   date = date1;
+        // }
         document.getElementById("dayTotWin").innerHTML = "-";
         const directref = doc(
           db,
@@ -215,18 +277,20 @@ let sale=0,win=0,p=0, comm=0;
       }
       const showBtn = document.getElementById("showBtn");
       showBtn.addEventListener("click", async () => {
-        let date = document.getElementById("date").value;
-        let i1 = date.indexOf("-"),
-          i2 = date.lastIndexOf("-");
-        date =
-          date.substring(0, i1 + 1) +
-          (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
-          "-" +
-          (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
-        const params = new URL(document.location).searchParams;
+        // let date = document.getElementById("date").value;
+        // let i1 = date.indexOf("-"),
+        //   i2 = date.lastIndexOf("-");
+        // date =
+        //   date.substring(0, i1 + 1) +
+        //   (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+        //   "-" +
+        //   (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+        //const params = new URL(document.location).searchParams;
         const dEmail = document.getElementById("dEmail").value
-        await saleBody(dEmail, date);
-        await winBody(dEmail, date);
+        // await saleBody(dEmail, date);
+        // await winBody(dEmail, date);
+        await saleBody(dEmail);
+        await winBody(dEmail);
         document.getElementById("profit").innerHTML=sale-win;
         document.getElementById("comm").innerHTML=comm;
         document.getElementById("weget").innerHTML=sale-win-comm;
