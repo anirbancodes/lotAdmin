@@ -91,7 +91,9 @@ async function historyTable(date, match) {
         let keys = Object.keys(game[i]);
         keys.forEach((scrip) => {
           amtS += game[i][scrip].amt;
-          arr.push(game[i][scrip].amt);
+          arr.push(
+            game[i][scrip].amt + "(" + game[i][scrip].email.charAt(0) + ")"
+          );
           peopleS++;
         });
         rowData +=
@@ -105,7 +107,7 @@ async function historyTable(date, match) {
           `</p></div><div style="text-align:center; margin-top:-15px; color:#B0C4DE">`;
 
         arr.forEach(
-          (sc) => (rowData += `<span style="font-size:10px">+${sc}</span>`)
+          (sc) => (rowData += `<span style="font-size:10px">${sc} </span>`)
         );
         rowData += `
           </div></div>
