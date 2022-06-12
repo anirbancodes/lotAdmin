@@ -18,8 +18,8 @@
     <h2>>> MyLot</h2>
     <div style="padding: 10px 20px; display: flex; flex-direction: column">
       <div style="display: flex">
-        <input type="date" id="date" />
-        &emsp; &emsp;
+        <!-- <input type="date" id="date" />
+        &emsp; &emsp; -->
         <select
           name="history-match"
           id="matchTime"
@@ -82,7 +82,12 @@
         </select>
       </div>
       <br />
-      <input type="number" id="result" style="width: 100px" />
+      <input
+        type="number"
+        style="width: 40px; font-size: 18px"
+        id="result"
+        style="width: 100px"
+      />
       <br /><br />
       <div style="margin-top: 20px; display: flex; align-items: center">
         <a
@@ -247,34 +252,35 @@
         const matchTime = document.getElementById("matchTime").value;
 
         const result = document.getElementById("result").value;
+        if (confirm("Are You Sure ?") == true) {
+          try {
+            await runTransaction(db, async (transaction) => {
+              const winners = (
+                await transaction.get(doc(db, "games", date))
+              ).data()[matchTime][result];
 
-        try {
-          await runTransaction(db, async (transaction) => {
-            const winners = (
-              await transaction.get(doc(db, "games", date))
-            ).data()[matchTime][result];
+              winners.forEach((winner) => {
+                console.log(winner);
+                if (winner.t == "d")
+                  winD.push([winner.email, winner.amt, winD.length]);
+                else if (winner.t == "c")
+                  winC.push([winner.email, winner.amt, winC.length]);
+                else if (winner.t == "a")
+                  winA.push([winner.email, winner.amt, winA.length]);
+              });
 
-            winners.forEach((winner) => {
-              console.log(winner);
-              if (winner.t == "d")
-                winD.push([winner.email, winner.amt, winD.length]);
-              else if (winner.t == "c")
-                winC.push([winner.email, winner.amt, winC.length]);
-              else if (winner.t == "a")
-                winA.push([winner.email, winner.amt, winA.length]);
+              // await func2(winD, winC, winA);
             });
+            console.log(winA, winC, winD);
+          } catch (e) {
+            alert("winner list not retrieved: " + e);
+          }
+          sendCredBtn.style.display = "none";
+          await func2(winD, winC, winA);
+          await func3(winD, winA, winC, matchTime, date);
 
-            // await func2(winD, winC, winA);
-          });
-          console.log(winA, winC, winD);
-        } catch (e) {
-          alert("winner list not retrieved: " + e);
+          alert("Wait 5 sec... transferring to all ");
         }
-        sendCredBtn.style.display = "none";
-        await func2(winD, winC, winA);
-        await func3(winD, winA, winC, matchTime, date);
-
-        alert("Wait 5 sec... transferring to all ");
       });
       async function func3(winD, winA, winC, matchTime, date) {
         await winCredD(winD, matchTime, date);
