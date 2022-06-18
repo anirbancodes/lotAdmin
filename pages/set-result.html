@@ -110,6 +110,77 @@
         id="checkWinnersBtn"
         >Check Winners</a
       > -->
+      <div style="margin-top: 60px">
+        <!-- <input type="date" id="date" />
+        &emsp; &emsp; -->
+        <select
+          name="delete-match"
+          id="deleteTime"
+          class="btn-submit"
+          style="color: white"
+        >
+          <option value="9:0 AM">9:0 AM</option>
+          <option value="9:15 AM">9:15 AM</option>
+          <option value="9:30 AM">9:30 AM</option>
+          <option value="9:45 AM">9:45 AM</option>
+          <option value="10:0 AM">10:0 AM</option>
+          <option value="10:15 AM">10:15 AM</option>
+          <option value="10:30 AM">10:30 AM</option>
+          <option value="10:45 AM">10:45 AM</option>
+          <option value="11:0 AM">11:0 AM</option>
+          <option value="11:15 AM">11:15 AM</option>
+          <option value="11:30 AM">11:30 AM</option>
+          <option value="11:45 AM">11:45 AM</option>
+          <option value="11:0 AM">11:0 AM</option>
+          <option value="11:15 AM">11:15 AM</option>
+          <option value="11:30 AM">11:30 AM</option>
+          <option value="11:45 AM">11:45 AM</option>
+          <option value="12:0 PM">12:0 PM</option>
+          <option value="12:15 PM">12:15 PM</option>
+          <option value="12:30 PM">12:30 PM</option>
+          <option value="12:45 PM">12:45 PM</option>
+          <option value="1:0 PM">1:0 PM</option>
+          <option value="1:15 PM">1:15 PM</option>
+          <option value="1:30 PM">1:30 PM</option>
+          <option value="1:45 PM">1:45 PM</option>
+          <option value="2:0 PM">2:0 PM</option>
+          <option value="2:15 PM">2:15 PM</option>
+          <option value="2:30 PM">2:30 PM</option>
+          <option value="2:45 PM">2:45 PM</option>
+          <option value="3:0 PM">3:0 PM</option>
+          <option value="3:15 PM">3:15 PM</option>
+          <option value="3:30 PM">3:30 PM</option>
+          <option value="3:45 PM">3:45 PM</option>
+          <option value="4:0 PM">4:0 PM</option>
+          <option value="4:15 PM">4:15 PM</option>
+          <option value="4:30 PM">4:30 PM</option>
+          <option value="4:45 PM">4:45 PM</option>
+          <option value="5:0 PM">5:0 PM</option>
+          <option value="5:15 PM">5:15 PM</option>
+          <option value="5:30 PM">5:30 PM</option>
+          <option value="5:45 PM">5:45 PM</option>
+          <option value="6:0 PM">6:0 PM</option>
+          <option value="6:15 PM">6:15 PM</option>
+          <option value="6:30 PM">6:30 PM</option>
+          <option value="6:45 PM">6:45 PM</option>
+          <option value="7:0 PM">7:0 PM</option>
+          <option value="7:15 PM">7:15 PM</option>
+          <option value="7:30 PM">7:30 PM</option>
+          <option value="7:45 PM">7:45 PM</option>
+          <option value="8:0 PM">8:0 PM</option>
+          <option value="8:15 PM">8:15 PM</option>
+          <option value="8:30 PM">8:30 PM</option>
+          <option value="8:45 PM">8:45 PM</option>
+          <option value="9:0 PM">9:0 PM</option>
+        </select>
+
+        <a
+          style="width: 40px; font-weight: 600; text-align: center"
+          class="btn-short"
+          id="deleteBtn"
+          >Delete Result</a
+        >
+      </div>
     </div>
     <script type="module">
       import {
@@ -125,6 +196,7 @@
         increment,
         getFirestore,
         serverTimestamp,
+        deleteField,
       } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
       const fc = {
@@ -146,6 +218,55 @@
           // loadUserData(user.email);
         } else {
           window.location = "/pages/login.html";
+        }
+      });
+
+      const deleteBtn = document.getElementById("deleteBtn");
+      deleteBtn.addEventListener("click", async () => {
+        let now = new Date();
+        let date =
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        const matchTime = document.getElementById("deleteTime").value;
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const resDoc = await transaction.get(doc(db, "result", date));
+
+            if (!resDoc.exists()) {
+              transaction.set(doc(db, "result", date), {});
+            }
+            // const resDoc = await transaction.get(doc(db, "result", date));
+
+            let alreadySet = resDoc.data()[matchTime] ? true : false;
+
+            if (alreadySet == true) {
+              const confirm = prompt("sure to delete ?", "yes/no");
+              if (confirm == "yes") {
+                transaction.update(
+                  doc(db, "result", date),
+                  {
+                    [`${matchTime}`]: deleteField(),
+                  },
+                  { merge: true }
+                );
+                setBtn.style.display = "none";
+                alert("Result Deleted");
+              } else return;
+            } else {
+              // transaction.update(
+              //   doc(db, "result", date),
+              //   {
+              //     [`${matchTime}`]: result,
+              //   },
+              //   { merge: true }
+              // );
+              // setBtn.style.display = "none";
+              // alert("Result set");
+            }
+          });
+        } catch (e) {
+          console.error(e);
+          alert("result delete failed" + e);
         }
       });
 
