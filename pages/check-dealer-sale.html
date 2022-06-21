@@ -148,6 +148,8 @@ async function showDealers(){
 
         const indirectref = doc(db, "dealers", email, "agentsale", date);
         const docSnap2 = await getDoc(indirectref);
+        const indirectref3 = doc(db, "dealers", email, "clientsale", date);
+        const docSnap3 = await getDoc(indirectref3);
         let total = 0;
         if (!docSnap1.exists() && !docSnap2.exists()) {
           document.getElementById("dayTotSale").innerHTML =
@@ -163,6 +165,10 @@ async function showDealers(){
           if (docSnap2.exists()) {
             const saleI = docSnap2.data();
             total += saleI.sale;
+          }
+          if (docSnap3.exists()) {
+            const saleI2 = docSnap2.data();
+            total += saleI2.sale;
           }
 
           /* document.getElementById(
