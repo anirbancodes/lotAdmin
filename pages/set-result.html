@@ -448,12 +448,39 @@
         winC.forEach(async (win) => {
           try {
             await runTransaction(db, async (transaction1) => {
+              const dEmail = (
+                await transaction1.get(doc(db, "agents", win[0]))
+              ).data().dEmail;
               const DU = await transaction1.get(
                 doc(db, "users", win[0], "credits", date)
+              );
+              const AUC = await transaction1.get(
+                doc(db, "dealers", dEmail, "offline", "lotto", "auCred", date)
               );
               if (!DU.exists()) {
                 transaction1.set(doc(db, "users", win[0], "credits", date), {});
               }
+              if (!AUC.exists()) {
+                transaction1.set(
+                  doc(
+                    db,
+                    "dealers",
+                    dEmail,
+                    "offline",
+                    "lotto",
+                    "auCred",
+                    date
+                  ),
+                  { credit: 0 }
+                );
+              }
+
+              transaction1.update(
+                doc(db, "dealers", dEmail, "offline", "lotto", "auCred", date),
+                {
+                  credit: increment(8 * win[1]),
+                }
+              );
 
               transaction1.update(doc(db, "users", win[0], "credits", date), {
                 lotto: arrayUnion({
@@ -476,9 +503,33 @@
         winA.forEach(async (win) => {
           try {
             await runTransaction(db, async (transaction1) => {
+              const dEmail = (
+                await transaction1.get(doc(db, "agents", win[0]))
+              ).data().dEmail;
+
               const AU = await transaction1.get(
                 doc(db, "agents", win[0], "offline", "lotto", "credits", date)
               );
+
+              const AUC = await transaction1.get(
+                doc(db, "dealers", dEmail, "offline", "lotto", "auCred", date)
+              );
+
+              if (!AUC.exists()) {
+                transaction1.set(
+                  doc(
+                    db,
+                    "dealers",
+                    dEmail,
+                    "offline",
+                    "lotto",
+                    "auCred",
+                    date
+                  ),
+                  { credit: 0 }
+                );
+              }
+
               if (!AU.exists()) {
                 transaction1.set(
                   doc(
@@ -498,6 +549,13 @@
                 doc(db, "agents", win[0], "offline", "lotto", "credits", date),
                 {
                   [`${matchTime}`]: increment(8 * win[1]),
+                }
+              );
+
+              transaction1.update(
+                doc(db, "dealers", dEmail, "offline", "lotto", "auCred", date),
+                {
+                  credit: increment(8 * win[1]),
                 }
               );
             });
