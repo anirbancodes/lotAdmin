@@ -20,6 +20,7 @@ console.log(people, totBetAmt);
 const marginP = 30; //document.getElementById("marginP").value; //30; //in %
 const marginAmt = (totBetAmt * (100 - marginP)) / 100;
 
+//changed code
 // const marginErrorP = 6,
 // peopleErrorP = 6; // in %
 const minAmtScrip = 0; //document.getElementById("minAmtScrip").value;
