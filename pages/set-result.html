@@ -265,8 +265,8 @@
       const setBtn = document.getElementById("setBtn");
       setBtn.addEventListener("click", async () => {
         let now = new Date();
-        let date = "2022-7-18";
-        //now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+        let date = //"2022-7-18";
+          now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
         const matchTime = document.getElementById("matchTime").value;
         const result = document.getElementById("result").value;
 
