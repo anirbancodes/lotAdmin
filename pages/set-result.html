@@ -441,7 +441,7 @@
           try {
             await runTransaction(db, async (transaction1) => {
               const dEmail = (
-                await transaction1.get(doc(db, "agents", win[0]))
+                await transaction1.get(doc(db, "users", win[0]))
               ).data().dEmail;
               const DU = await transaction1.get(
                 doc(db, "users", win[0], "credits", date)
