@@ -91,8 +91,9 @@
         let password = document.getElementById("password").value;
         //user_margin.textContent = "";
 
-        setPersistence(auth, browserSessionPersistence).then(() => {
-          return signInWithEmailAndPassword(auth, email, password)
+        //setPersistence(auth, browserSessionPersistence).then(() => {
+         // return 
+	signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
               const user = userCredential.user;
               // loginStyle();
@@ -105,7 +106,7 @@
               console.log(errorCode, errorMessage);
             });
         });
-      });
+     // });
 
       /*  logoutBtn.addEventListener("click", (e) => {
         signOut(auth)
